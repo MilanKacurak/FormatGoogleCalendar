@@ -148,6 +148,9 @@ var formatGoogleCalendar = (function() {
             summary = result.summary || '',
             description = result.description || '',
             location = result.location || '',
+            dateStart_url = (result.start.dateTime || result.start.date).replace(/[-]/g,'').replace('05:00','').replace(/[:]/g,''),
+            dateEnd_url = (result.end.dateTime || result.end.date).replace(/[-]/g,'').replace('05:00','').replace(/[:]/g,''),
+            htmlLink = 'https://calendar.google.com/calendar/event?action=TEMPLATE&hl=en&ctz=America%2FChicago&text=' + encodeURIComponent(summary) + '&dates=' + encodeURIComponent(dateStart_url+'/'+dateEnd_url) + '&location=' + encodeURIComponent(location) + '&details=' + encodeURIComponent(description),
             i;
 
         for (i = 0; i < format.length; i++) {
@@ -162,11 +165,14 @@ var formatGoogleCalendar = (function() {
                 output = output.concat('<span class="description">' + description + '</span>');
             } else if (format[i] === '*location*') {
                 output = output.concat('<span class="location">' + location + '</span>');
+            } else if (format[i] === '*htmlLink*') {
+                output = output.concat('<a href=' + htmlLink + '>Add to Your Calendar!</a>');
             } else {
                 if ((format[i + 1] === '*location*' && location !== '') ||
                     (format[i + 1] === '*summary*' && summary !== '') ||
                     (format[i + 1] === '*date*' && dateFormatted !== '') ||
-                    (format[i + 1] === '*description*' && description !== '')) {
+                    (format[i + 1] === '*description*' && description !== '') ||
+                    (format[i + 1] === '*htmlLink*' && htmlLink !== '')) {
 
                     output = output.concat(format[i]);
                 }
@@ -225,7 +231,7 @@ var formatGoogleCalendar = (function() {
      date.setTime(date.getTime() + 86400000);
      return getDateInfo(date);
      };
-    
+
     //Subtract one day
     var subtractOneDay = function (dateInfo) {
       var date = getDateFormatted(dateInfo);
@@ -304,7 +310,7 @@ var formatGoogleCalendar = (function() {
     };
 
     //Check differences between dates and format them
-    var getFormattedDate = function(dateStart, dateEnd, moreDaysEvent, isAllDayEvent, dayNames) {
+    var getFormattedDate = function(dateStart, dateEnd, moreDaysEvent, isAllDayEvent, dayNames, htmlLink) {
         var formattedDate = '';
 
         if (dateStart[0] === dateEnd[0]) {
@@ -346,6 +352,7 @@ var formatGoogleCalendar = (function() {
         }
 
         return formattedDate;
+        return htmlLink;
     };
 
     var getFormattedTime = function (date) {
