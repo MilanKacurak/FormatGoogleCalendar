@@ -34,6 +34,7 @@ The library could be found in the <b>dist</b> folder of this repository.
 * upcomingHeading (string, heading of upcoming events)<br>
 * pastHeading (string, heading of past events)<br>
 * format (array, describes format in which should be data displayed, it is a list of strings where wildcards are <code><b>\*date\*</b>, <b>\*summary\*</b>, <b>\*description\*</b>, <b>\*location\*</b></code>, if a string is a different value than a wildcard the string will be appended to the final output)<br>
+* serverTZ (boolean, determines whether to show times of events as returned by the server or use the browser's timezone)<br>
 ## Notes
 You can customize <code><b>calendarUrl</b></code> with use of various parameters which are listed in the <a target="_blank" href="https://developers.google.com/google-apps/calendar/v3/reference/events/list"> Google Calendar API page</a>. Following options of this library: <code><b>recurringEvents</b></code>, <code><b>timeMin</b></code>, <code><b>timeMax</b></code> operate directly with the Google Calendar API url parameters.
 

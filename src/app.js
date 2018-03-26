@@ -218,7 +218,15 @@ window.formatGoogleCalendar = (() => {
 
     //Get temp array with information abou day in followin format: [day number, month number, year, hours, minutes]
     const getDateInfo = date => {
-        date = new Date(date);
+	if (config.serverTZ && typeof date === 'string') {
+            // Use the timezone as returned by the server
+            var b = date.split(/\D/);
+            date = new Date(b[0], b[1]-1, b[2], b[3], b[4], b[5]);
+        }
+        else {
+            // Use the timezone of the browser (or the argument date has already been converted to a Date object)
+            date = new Date(date);
+        }
         return [date.getDate(), date.getMonth(), date.getFullYear(), date.getHours(), date.getMinutes(), 0, 0];
     };
 
@@ -416,7 +424,8 @@ window.formatGoogleCalendar = (() => {
                 pastHeading: '<h2>Past events</h2>',
                 format: ['*date*', ': ', '*summary*', ' &mdash; ', '*description*', ' in ', '*location*'],
                 timeMin: undefined,
-                timeMax: undefined
+                timeMax: undefined,
+                serverTZ: false
             };
 
             settings = mergeOptions(settings, settingsOverride);
